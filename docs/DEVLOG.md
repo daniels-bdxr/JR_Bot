@@ -1,0 +1,48 @@
+# DEVLOG
+
+## 2026-02-04
+- Initialized minimal Node + TypeScript Slack bot using Bolt in Socket Mode.
+- Added env validation with zod and dotenv loading.
+- Implemented DM handler to reply in-thread and log message metadata.
+- Added scripts for dev/build/start and baseline project docs.
+- Switched dev/build config to CommonJS to fix ts-node-dev ESM loading error.
+- Added Express health server on `/health` with configurable `PORT` (default 3000).
+- Added Trello client wrapper plus smoke test script to create an inbox card.
+- Wired Slack DM capture to create Trello inbox cards and reply with the card URL.
+- Added `/verify` Slack command to confirm Slack + Trello connectivity via create/delete.
+- Renamed verify command to `/jrbot-verify` due to Slack reserved word.
+- Added Trello list operations, boards config loader, and inbox peek script for Clarify prep.
+- Added in-memory clarify sessions and /clarify command with Block Kit controls (read-only).
+- Added Clarify Step 1 board selection UI with in-place updates and saved selection.
+- Added Clarify Step 2/3 branching questions with in-place updates and back navigation.
+- Added next-action modal and summary screen for actionable items.
+- Added label selection screens (priority/energy/status) and deadline modal (no Trello writes).
+- Added commit action to apply clarify decisions to Trello and advance to next card.
+- Added clarify resume behavior, removed Trello URLs from Slack UX, and added session expiration.
+- Added doneWeekly list mapping and Trello list discovery script for board setup.
+- Added JD-BOT footer helpers and Trello checklist utilities.
+- Added project clarify workflow with project details modal, action card creation, and footer/checklist updates.
+- Added /done command to complete actions, update project checklists, and roll next actions.
+- Added /brief command to generate a read-only Morning Brief across boards.
+- Added /review end-of-day flow with brief history persistence and progress logging.
+- Refined /review to DM-only, single-message updates, and no per-item spam.
+- Added /review done flow to prompt for next action creation linked to projects.
+- Added /brief task selection modal and limited /review to selected tasks.
+- Added shared Slack session renderer for clarify/review messages.
+- Added /home DM screen with persistent state and navigation buttons.
+- Added Gemini client, env validation, and smoke test script.
+- Added structured Gemini helper with JSON validation and AI validation script.
+- Added ClarifySuggestion schema, prompt builder, and sample AI validation script.
+- Updated capture flow to react ✅ on success and reply only on error.
+- Added Clarify AI suggestion section in board selection with accept/edit/ignore tracking.
+- Increased default Gemini structured timeout to reduce retries under load.
+- Increased default Gemini structured timeout to 20s.
+- Reduced Clarify AI suggestion retries to avoid repeated timeouts during /clarify.
+- Added Clarify suggestion accept/edit/ignore behavior with confirm screen and prefilled defaults.
+- Added Clarify suggesting indicator and in-flight guard to avoid duplicate Gemini calls.
+- Added AI enable/disable flags, AI metrics tracking, and /ai-status command.
+- Added project next-action AI schema, prompt builder, and sample script.
+- Added /home auto-pin behavior with pins helper and pinned home state tracking.
+- Added AI suggested next-action flow after /done for project-linked actions.
+- Added review-time AI next-action suggestions and skip suppression logging.
+- Added stalled project detection section to Morning Brief.

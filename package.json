@@ -1,0 +1,29 @@
+{
+  "name": "jrbot-gtd",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "trello:test": "ts-node-dev --transpile-only src/scripts/trello-smoke-test.ts",
+    "inbox:peek": "ts-node-dev --transpile-only src/scripts/inbox-peek.ts",
+    "trello:lists": "ts-node-dev --transpile-only src/scripts/trello-list-discovery.ts",
+    "footer:test": "ts-node-dev --transpile-only src/scripts/footer-test.ts",
+    "gemini:test": "ts-node-dev --transpile-only src/scripts/gemini-test.ts",
+    "ai:validate": "ts-node-dev --transpile-only src/scripts/ai-validate.ts",
+    "ai:clarify:sample": "ts-node-dev --transpile-only src/scripts/ai-clarify-sample.ts",
+    "ai:project:sample": "ts-node-dev --transpile-only src/scripts/ai-project-sample.ts"
+  },
+  "dependencies": {
+    "@google/genai": "^1.5.1",
+    "@slack/bolt": "^3.18.0",
+    "dotenv": "^16.4.5",
+    "express": "^5.2.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.4.5"
+  }
+}
