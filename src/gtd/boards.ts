@@ -27,7 +27,9 @@ const boardsConfigSchema = z.object({
 export type BoardsConfig = z.infer<typeof boardsConfigSchema>;
 
 export function loadBoardsConfig(): BoardsConfig {
-  const configPath = join(process.cwd(), "config", "boards.json");
+  const configPath =
+    process.env.BOARDS_CONFIG_PATH ??
+    join(process.cwd(), "config", "boards.json");
   let raw: unknown;
   try {
     const contents = readFileSync(configPath, "utf-8");

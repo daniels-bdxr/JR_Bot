@@ -47,6 +47,7 @@ import {
 import { buildClarifyPrompt } from "./ai/prompts/clarifyPrompt";
 import { buildProjectNextActionPrompt } from "./ai/prompts/projectNextActionPrompt";
 import { getAiMetrics } from "./ai/metrics";
+import { z } from "zod";
 
 const env = loadEnv(process.env);
 const boardsConfig = loadBoardsConfig();
@@ -207,6 +208,73 @@ app.command("/ai-status", async ({ ack, respond, command }) => {
       recentLine,
     ].join("\n")
   );
+});
+
+app.command("/self-check", async ({ ack, respond, command, client }) => {
+  await ack();
+
+  if (
+    !command.channel_id.startsWith("D") &&
+    command.channel_name !== "directmessage"
+  ) {
+    await respond("Please run /self-check in a DM with me.");
+    return;
+  }
+
+  const missingEnv: string[] = [];
+  const requiredEnv = [
+    "SLACK_BOT_TOKEN",
+    "SLACK_APP_TOKEN",
+    "TRELLO_API_KEY",
+    "TRELLO_API_TOKEN",
+    "TRELLO_INBOX_LIST_ID",
+    "TRELLO_INBOX_RAW_LIST_ID",
+    "TRELLO_INBOX_QUICK_LIST_ID",
+    "TRELLO_INBOX_REFERENCE_LIST_ID",
+    "GEMINI_API_KEY",
+  ];
+  for (const key of requiredEnv) {
+    if (!process.env[key] || String(process.env[key]).trim().length === 0) {
+      missingEnv.push(key);
+    }
+  }
+
+  const lines: string[] = [];
+  if (missingEnv.length > 0) {
+    lines.push(`⚠️ Missing env vars: ${missingEnv.join(", ")}`);
+  } else {
+    lines.push("✅ Env vars present");
+  }
+
+  try {
+    const cards = await trello.getCardsInList(env.TRELLO_INBOX_RAW_LIST_ID, {
+      limit: 1,
+    });
+    lines.push(`✅ Trello reachable (Raw Inbox count: ${cards.length})`);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "unknown error";
+    lines.push(`⚠️ Trello error: ${message}`);
+  }
+
+  if (!env.AI_ENABLED) {
+    lines.push("⚠️ AI disabled");
+  } else {
+    const testSchema = z.object({ ok: z.literal("OK") });
+    const result = await generateStructured({
+      system: "Return only JSON matching the schema.",
+      user: "Return the JSON object {\"ok\":\"OK\"} only.",
+      schema: testSchema,
+      timeoutMs: 10000,
+      maxRetries: 1,
+    });
+    if (result.ok) {
+      lines.push("✅ Gemini structured test OK");
+    } else {
+      lines.push(`⚠️ Gemini error: ${result.error}`);
+    }
+  }
+
+  await respond(lines.join("\n"));
 });
 
 function truncate(text: string, max: number): string {
@@ -5429,10 +5497,32 @@ app.view("review_progress_modal", async ({ ack, body, view, client }) => {
   await advanceReview({ session, client });
 });
 
+let isShuttingDown = false;
+
+async function shutdown(signal: string) {
+  if (isShuttingDown) {
+    return;
+  }
+  isShuttingDown = true;
+  console.log(`Received ${signal}, shutting down...`);
+  try {
+    await app.stop();
+  } catch (error) {
+    console.error("Error stopping Slack app", error);
+  }
+  process.exit(0);
+}
+
+process.on("SIGTERM", () => shutdown("SIGTERM"));
+process.on("SIGINT", () => shutdown("SIGINT"));
+
 (async () => {
   await app.start();
   server.listen(env.PORT, () => {
     console.log(`✅ Health server listening on :${env.PORT}`);
+    console.log(
+      `Startup: env=${process.env.NODE_ENV ?? "development"} port=${env.PORT} ai=${env.AI_ENABLED ? "on" : "off"} model=${env.GEMINI_MODEL}`
+    );
   });
   console.log("⚡️ Slack bot is running in Socket Mode");
 })();

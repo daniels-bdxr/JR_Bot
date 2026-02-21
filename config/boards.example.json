@@ -1,0 +1,49 @@
+{
+  "boards": [
+    {
+      "key": "personal",
+      "name": "At Home To-Do Board (GTD)",
+      "boardId": "REPLACE_ME",
+      "lists": {
+        "processing": "REPLACE_ME",
+        "actionItems": "REPLACE_ME",
+        "inProgress": "REPLACE_ME",
+        "projects": "REPLACE_ME",
+        "waitingFor": "REPLACE_ME",
+        "maybeSomeday": "REPLACE_ME",
+        "reference": "REPLACE_ME",
+        "doneWeekly": "REPLACE_ME"
+      }
+    },
+    {
+      "key": "ai_xr",
+      "name": "Personal Projects Board (GTD)",
+      "boardId": "REPLACE_ME",
+      "lists": {
+        "processing": "REPLACE_ME",
+        "actionItems": "REPLACE_ME",
+        "inProgress": "REPLACE_ME",
+        "projects": "REPLACE_ME",
+        "waitingFor": "REPLACE_ME",
+        "maybeSomeday": "REPLACE_ME",
+        "reference": "REPLACE_ME",
+        "doneWeekly": "REPLACE_ME"
+      }
+    },
+    {
+      "key": "bd_xr",
+      "name": "Work Board (GTD)",
+      "boardId": "REPLACE_ME",
+      "lists": {
+        "processing": "REPLACE_ME",
+        "actionItems": "REPLACE_ME",
+        "inProgress": "REPLACE_ME",
+        "projects": "REPLACE_ME",
+        "waitingFor": "REPLACE_ME",
+        "maybeSomeday": "REPLACE_ME",
+        "reference": "REPLACE_ME",
+        "doneWeekly": "REPLACE_ME"
+      }
+    }
+  ]
+}

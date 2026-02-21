@@ -61,6 +61,14 @@ const envSchema = z.object({
       return String(value).toLowerCase().trim();
     }, z.enum(["basic", "none"]))
     .default("basic"),
+  BOARDS_CONFIG_PATH: z
+    .preprocess((value) => {
+      if (value === undefined || value === null || value === "") {
+        return "config/boards.json";
+      }
+      return String(value);
+    }, z.string().min(1))
+    .default("config/boards.json"),
 });
 
 export type Env = z.infer<typeof envSchema>;

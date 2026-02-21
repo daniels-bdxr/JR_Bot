@@ -46,3 +46,4 @@
 - Added AI suggested next-action flow after /done for project-linked actions.
 - Added review-time AI next-action suggestions and skip suppression logging.
 - Added stalled project detection section to Morning Brief.
+- Added boards.example.json, gitignored boards.json, and configurable boards path.

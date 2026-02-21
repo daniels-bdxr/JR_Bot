@@ -5,4 +5,4 @@ data/
 .DS_Store
 node_modules/
 dist/
-
+config/boards.json

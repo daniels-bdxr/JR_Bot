@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist",
     "start": "node dist/index.js",
     "trello:test": "ts-node-dev --transpile-only src/scripts/trello-smoke-test.ts",
     "inbox:peek": "ts-node-dev --transpile-only src/scripts/inbox-peek.ts",
